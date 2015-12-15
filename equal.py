@@ -1,18 +1,10 @@
 #!/bin/python3
 
-def getLocalMin(internList):
-    m = min(internList)
-    internSet = set(internList)
-    internSet.remove(m)
-    m2 = min(internSet)
-    for i in range(internList.count(m)-1):
-        internList.remove(m)
-        
-    return m2, internList
-
-def increment(internList, hold):
+def decrement(internList):
     countAdj = 0
-    m = internList[hold] - min(internList)
+    gMax = max(internList)
+    gMin = min(internList)
+    m = gMax - gMin
     
     incX5 = (m - (m%5))
     if incX5 != 0:
@@ -23,16 +15,12 @@ def increment(internList, hold):
     if incX2 != 0:
         countAdj += int(incX2/2)
     
-    m1 = m2%2
-    incX1 = (m1 - (m1%1))
-    if incX1 != 0:
-        countAdj += 1
+    incX1 = m2%2
+    countAdj += m2%2
         
     incX = incX5 + incX2 + incX1
-    
-    for i in range(len(internList)):
-        if i != hold:
-            internList[i] = internList[i] + incX
+
+    internList[internList.index(gMax)] -= incX
             
     return internList, countAdj
 
@@ -46,9 +34,7 @@ def main(internList):
     count = 0
     isEqual = False
     while not isEqual:
-        localMin, internList = getLocalMin(internList)
-        hold = internList.index(localMin)
-        internList, countAdj = increment(internList, hold)
+        internList, countAdj = decrement(internList)
         isEqual = check(internList)
           
         count += countAdj
