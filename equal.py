@@ -1,48 +1,47 @@
 #!/bin/python3
 
-def decrement(internList):
-    countAdj = 0
-    gMax = max(internList)
-    gMin = min(internList)
-    m = gMax - gMin
-    
-    incX5 = (m - (m%5))
-    if incX5 != 0:
-        countAdj = int(incX5/5)
-    
-    m2 = m%5
-    incX2 = (m2 - (m2%2))
-    if incX2 != 0:
-        countAdj += int(incX2/2)
-    
-    incX1 = m2%2
-    countAdj += m2%2
+import timeit
+
+def isLow(internList):
+    isMod = False
+    for value in internList:
+        if value == 1:
+            isMod = True
+        elif value%2 == 0:
+            isMod = True
+        elif value%5 == 0:
+            isMod = True
+        else:
+            isMod = False
+            break
         
-    incX = incX5 + incX2 + incX1
-
-    internList[internList.index(gMax)] -= incX
-            
-    return internList, countAdj
-
-def check(internList):
-    if internList.count(internList[0]) == len(internList):
-        return True
-    else:
-        return False
+    return isMod
 
 def main(internList):
     count = 0
-    isEqual = False
-    while not isEqual:
-        internList, countAdj = decrement(internList)
-        isEqual = check(internList)
-          
-        count += countAdj
+    gMin = min(internList)
+    if isLow(internList):
+        gMin = 0
+    
+    for value in internList:
+        if value != gMin:
+            m = value - gMin
+            count += int((m - (m%5))/5)
+            count += int((m%5 - ((m%5)%2))/2)
+            count += (m%5)%2
 
     return count
     
-t = int(input())
+#t = int(input())
+#for i in range(t):
+#    n = int(input())
+#    q = [int(arr_temp) for arr_temp in input().strip().split(' ')]
+#    print(main(q))
+
+f = open('test3', 'r')
+t = int(f.readline())
+
 for i in range(t):
-    n = int(input())
-    q = [int(arr_temp) for arr_temp in input().strip().split(' ')]
+    n = int(f.readline())
+    q = [int(arr_temp) for arr_temp in f.readline().strip().split(' ')]
     print(main(q))
